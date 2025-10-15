@@ -1,5 +1,5 @@
-const Task = require("../modules/Task");
-const User = require("../modules/User");
+const Task = require("../models/Task");
+const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
 //@desc get all users (Admin only)
