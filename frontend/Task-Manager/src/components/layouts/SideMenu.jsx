@@ -41,7 +41,7 @@ const SideMenu = ({ activeMenu }) => {
                 </div>
 
                 {user?.role === 'admin' && (
-                    <div className="text-[10px] font-medium text-white bgprimary px-3 py-0.5 rounded mt-1">
+                    <div className="text-[12px] font-medium text-white bg-primary px-3 py-0.5 rounded mt-1">
                         Admin
                     </div>
                 )}
@@ -57,7 +57,7 @@ const SideMenu = ({ activeMenu }) => {
                         key={`menu_${index}`}
                         className={`w-full flex items-center gap-4 text-[15px] py-3 px-6 mb-3 cursor-pointer rounded-r-md transition-all duration-200 ${
                             activeMenu === item.label
-                                ? 'text-primary bg-gradient-to-r from-blue-50/40 to-blue-100/50 border-r-3'
+                                ? 'text-primary bg-gradient-to-r from-blue-50/40 to-blue-100/50 border-r-2'
                                 : 'hover:bg-gray-100'
                         }`}
                         onClick={() => handleClick(item.path)}
