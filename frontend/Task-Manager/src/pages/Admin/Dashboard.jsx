@@ -33,6 +33,10 @@ const Dashboard = () => {
     }
   };
 
+  const onSeeMore= () => {
+    navigate('/admin/tasks')
+  }
+
   useEffect(() => {
     getDashboardData();
 
@@ -50,9 +54,8 @@ const Dashboard = () => {
               {moment().format("dddd Do MMM YYYY")}
             </p>
           </div>
-
-
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5"></div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <InfoCard 
             label="Total Tasks"
             value={addThousandSeparators(dashboardData?.charts?.taskDistribution?.All || 0
@@ -64,8 +67,39 @@ const Dashboard = () => {
             label="Pending Tasks"
             value={addThousandSeparators(dashboardData?.charts?.taskDistribution?.Pending || 0
             )}
-            color="bg-primary"
+            color="bg-violet-500"
           />
+
+          <InfoCard 
+            label="In Progress Tasks"
+            value={addThousandSeparators(dashboardData?.charts?.taskDistribution?.InProgress || 0
+            )}
+            color="bg-cyan-500"
+          />
+
+          <InfoCard 
+            label="Completed Tasks"
+            value={addThousandSeparators(dashboardData?.charts?.taskDistribution?.Completed || 0
+            )}
+            color="bg-lime-500"
+          />
+
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
+        <div className="md:col-span-2">
+          <div className="card">
+            <div className="flex items-center justify-between ">
+              <h5 className="text-lg">Recent Tasks</h5>
+
+              <button className="card-btn" onClick={onSeeMore}>
+                See All<LuArrowRight className="text-base" />
+              </button>
+            </div>
+
+            <TaskListTable tableData={dashboardData?.recentTasks || []} />
+          </div>
         </div>
       </div>
     </DashboardLayout>
