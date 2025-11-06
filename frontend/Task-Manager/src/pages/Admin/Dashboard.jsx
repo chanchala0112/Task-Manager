@@ -7,7 +7,14 @@ import { useContext } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import moment from 'moment'
 import { API_PATHS } from "../../utils/apiPaths";
-import { addThousandSeparators } from "../../utils/helpers";
+import { addThousandSeparators } from "../../utils/helper";
+import InfoCard from "../../Cards/InfoCard";
+import { LuArrowRight } from "react-icons/lu";
+import TaskListTable from "../../components/TaskListTable";
+import CustomPieChart from "../../components/Charts/customPieChart";
+
+
+const COLORS = ["#8D51FF", "#0088DB", "#78CE00"]
 
 const Dashboard = () => {
   useUserAuth();
@@ -18,7 +25,29 @@ const Dashboard = () => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const [piechartDate, setPiechartData] = useState([]);
-  const [barchartData, setBarchartData] = useState([]);
+  const [barChartData, setBarchartData] = useState([]);
+
+  // Prepare Chart Data
+  const prepareChartData = (data) => {
+    const taskDistribution = data?.taskDistribution || null;
+    const taskPriorityLevels = data?.taskPriorityLevels || null;
+
+    const taskDistributionData = [
+      { status: "Pending", count: taskDistribution?.Pending || 0 },
+      { status: "InProgress", count: taskDistribution?.InProgress || 0 },
+      { status: "Completed", count: taskDistribution?.Completed || 0 },
+    ];
+
+    setPiechartData(taskDistributionData);
+
+    const priorityLevelData = [
+      { priority: "High", count: taskPriorityLevels?.High || 0 },
+      { priority: "Medium", count: taskPriorityLevels?.Medium || 0 },
+      { priority: "Low", count: taskPriorityLevels?.Low || 0 },
+    ];
+
+    setBarchartData(priorityLevelData);
+  }
 
   const getDashboardData = async () => {
     try {
@@ -27,6 +56,7 @@ const Dashboard = () => {
       );
       if (response.data) {
         setDashboardData(response.data);
+        prepareChartData(response.data?.charts || null);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -88,6 +118,31 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between ">
+              <h5 className="text-lg">Task Distribution</h5>
+            </div>
+
+            <CustomPieChart 
+              data={piechartDate}
+              colors={COLORS}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between ">
+              <h5 className="text-lg">Task Priority Levels</h5>
+            </div>
+
+            <CustomBarChart 
+              data={barChartData}
+            />
+          </div>
+        </div>
+
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between ">
