@@ -12,6 +12,8 @@ import InfoCard from "../../Cards/InfoCard";
 import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/customPieChart";
+import CustomBarChart from "../../components/Charts/CustomBarChart";
+
 
 
 const COLORS = ["#8D51FF", "#0088DB", "#78CE00"]
@@ -24,7 +26,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const [dashboardData, setDashboardData] = useState(null);
-  const [piechartDate, setPiechartData] = useState([]);
+  const [piechartData, setPiechartData] = useState([]);
   const [barChartData, setBarchartData] = useState([]);
 
   // Prepare Chart Data
@@ -52,7 +54,7 @@ const Dashboard = () => {
   const getDashboardData = async () => {
     try {
       const response = await axiosInstance.get(
-        API_PATHS.TASKS.GET_TASKS_DASHBOARD_DATA
+        API_PATHS.TASKS.GET_DASHBOARD_DATA
       );
       if (response.data) {
         setDashboardData(response.data);
@@ -79,8 +81,8 @@ const Dashboard = () => {
       <div className="card my-5">
         <div>
           <div className="col-span-3">
-            <h2 className="text-xl md:text-2">Good Morning! {user?.name}</h2>
-            <p className="text-x5 md:text-[13px] text-gray-400 mt-1.5">
+            <h2 className="text-xl md:text-2xl">Good Morning! {user?.name}</h2>
+            <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
               {moment().format("dddd Do MMM YYYY")}
             </p>
           </div>
@@ -125,7 +127,7 @@ const Dashboard = () => {
             </div>
 
             <CustomPieChart 
-              data={piechartDate}
+              data={piechartData}
               colors={COLORS}
             />
           </div>

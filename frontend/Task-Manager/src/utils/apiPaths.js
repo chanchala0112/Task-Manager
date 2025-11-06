@@ -5,7 +5,7 @@ export const API_PATHS = {
     AUTH: {
         REGISTER: "/api/auth/register", //Register a new user (Admin or Memeber)
         LOGIN: "/api/auth/login", //Authenticate user & return JWT token
-        GET_PROFILE: "/api/auth/peofile", //Get logged-in user details
+        GET_PROFILE: "/api/auth/profile", //Get logged-in user details
     },
 
     USERS: {
