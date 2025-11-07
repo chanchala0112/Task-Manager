@@ -71,3 +71,7 @@ export const STATUS_DATA = [
     { label: "In Progress", value: "In progress" },
     { label: "Completed", value: "Completed" },
 ]
+
+export const STATUS_DATA = [
+    
+]
