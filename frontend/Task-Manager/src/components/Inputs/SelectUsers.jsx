@@ -2,18 +2,20 @@ import React, { useEffect, useState} from 'react'
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { LuUsers } from 'react-icons/lu';
+import AvatarGroup from "./AvatarGroup";
+import Modal from "../Modal";
 
 
 const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
     const [allUsers,setAllUsers] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false); //i change true to false using chatgpt command
     const [tempSelectedUsers, setTempSelectedUsers] = useState([]);
 
     const getAllUsers = async () => {
         try {
             const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-            if (reaponse.data.?length > 0){
-                setAllUsers(response.Data);
+            if (response.data?.length > 0){
+                setAllUsers(response.data);
             }
 
         } catch (error) {
@@ -22,29 +24,33 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
     };
 
     const toggleUserSelection = (userId) => {
-        setTempSelectedUsers{(prev) => 
+        setTempSelectedUsers((prev) => 
             prev.includes(userId)
-            ?prev.filter((id) => id !== userId)
+            ? prev.filter((id) => id !== userId)
             : [...prev, userId]
-        };
+        );
     };
 
     const handleSAssign = () => {
-        setSelectedUsers(tempSelectUsers);
-        setIsModelOpen(false);
+        setSelectedUsers(tempSelectedUsers);
+        setIsModalOpen(false);
     };
 
-    const setSelectedUserAvatars = allUsers.filter((user) => selectedUsers.includes(user._id))
+    const setSelectedUserAvatars = allUsers
+    .filter((user) => selectedUsers.includes(user._id))
     .map((user) => user.profileImageUrl);
+
+    useEffect(() => {
+    getAllUsers();
+    }, []);
 
     useEffect(() => {
         if (selectedUsers.length === 0){
             setTempSelectedUsers([]);
         }
+    }, [selectedUsers]);
 
-        return() = {};
-    }, [selectUsers]);
-
+   
   return (
     <div classNAme="space-y-4 mt-2">
     {setSelectedUserAvatars.length === 0 && (
@@ -53,15 +59,60 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
         </button>
     )}
 
+    {setSelectedUserAvatars.length > 0 && (
+        <div className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+            <AvertarGroup avatars={setSelectedUserAvatars} maxVisible={3}/>
+        </div>
+    )}
+
     <Modal 
-        isOpen={isModelOpen}
+        isOpen={isModalOpen}
         onClick={() => setIsModalOpen(false)}
         title="Select Users"
-    />
+    >
 
-    <div className="space-y-4 h-[60vh] overFlow-y-auto"></div>
+    <div className="space-y-4 h-[60vh] overFlow-y-auto">
+        {allUsers.map((user) => {
+            <div 
+            key={user.id}
+            className="flex items-center gap-4 border-b border-gray-200">
+                <img 
+                src={user.profileImageUrl} 
+                alt={user.name}
+                className="w-10 h-10 rounded-full"
+                />
+
+                <div className="flex-1">
+                    <p className="font-medium text-gray-800 dark:text-white">
+                        {user.name}
+                    </p>
+                    <p className="text-[13px] text-gray-500">
+                        {user.email}
+                    </p>
+                </div>
+
+                <input type="checkbox"
+                checked={tempSelectedUsers.includes(user._id)}
+                onChange={()=> toggleUserSelection(user._id)}
+                className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none"
+                />-
+            </div>
+            
+
+        })}
+    </div>
+
+    <div className="flex justify-end gap-4 pt-4">
+        <button className="card-btn" onClick={() => setIsModalOpen(false)}>
+            CANCEL
+        </button>
+        <button className="car-btn-fill" onClick={(handleSAssign)}>
+            DONE
+        </button>
+    </div>
+    </Modal>
   </div>
-  )
+  );
 };
 
 export default SelectUsers
