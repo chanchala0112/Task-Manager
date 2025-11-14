@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react'
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { LuUsers } from 'react-icons/lu';
-import AvatarGroup from "./AvatarGroup";
+import AvatarGroup from "../../layout/AvatarGroup";
 import Modal from "../Modal";
 
 
@@ -48,20 +48,21 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
         if (selectedUsers.length === 0){
             setTempSelectedUsers([]);
         }
+
     }, [selectedUsers]);
 
    
   return (
-    <div classNAme="space-y-4 mt-2">
-    {setSelectedUserAvatars.length === 0 && (
+    <div className="space-y-4 mt-1">
+    {setSelectedUserAvatars.lenght === 0 && (
         <button className="card-btn" onClick={() => setIsModalOpen(true)}> 
             <LuUsers className="text-sm" /> Add Members
         </button>
     )}
 
-    {setSelectedUserAvatars.length > 0 && (
+    {setSelectedUserAvatars.lenght > 0 && (
         <div className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
-            <AvertarGroup avatars={setSelectedUserAvatars} maxVisible={3}/>
+            <AvatarGroup avatars={setSelectedUserAvatars} maxVisible={3}/>
         </div>
     )}
 
@@ -71,10 +72,10 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
         title="Select Users"
     >
 
-    <div className="space-y-4 h-[60vh] overFlow-y-auto">
-        {allUsers.map((user) => {
+    <div className="space-y-4 h-[60vh] overflow-y-auto">
+        {allUsers.map((user) => (
             <div 
-            key={user.id}
+            key={user._id}
             className="flex items-center gap-4 border-b border-gray-200">
                 <img 
                 src={user.profileImageUrl} 
@@ -99,14 +100,14 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
             </div>
             
 
-        })}
+        ))}
     </div>
 
     <div className="flex justify-end gap-4 pt-4">
         <button className="card-btn" onClick={() => setIsModalOpen(false)}>
             CANCEL
         </button>
-        <button className="car-btn-fill" onClick={(handleSAssign)}>
+        <button className="card-btn-fill" onClick={handleSAssign}>
             DONE
         </button>
     </div>

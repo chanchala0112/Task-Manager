@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AvertarGroup = ({avatars, maxVisible=3}) => {
+const AvatarGroup = ({avatars, maxVisible=3}) => {
   return (
     <div className="flex items-center">
         {avatars.slice(0, maxVisible).map((avatar, index) => (
@@ -15,11 +15,11 @@ const AvertarGroup = ({avatars, maxVisible=3}) => {
 
         {avatars.lenght > maxVisible && (
             <div className="w-9 h-9 flex items-center justify-center bg-blue text-sm font-medium rounded-full border-2 border-white -ml-3">
-                +{avatars.lenght - maxVisible}
+                +{avatars.length - maxVisible}
             </div>
         )}
     </div>
   )
 }
 
-export default AvertarGroup
+export default AvatarGroup
