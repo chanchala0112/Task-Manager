@@ -8,7 +8,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import moment from 'moment'
 import { API_PATHS } from "../../utils/apiPaths";
 import { addThousandSeparators } from "../../utils/helper";
-import InfoCard from "../../Cards/InfoCard";
+import InfoCard from "../../components/cards/InfoCard";
 import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/customPieChart";

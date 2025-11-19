@@ -5,22 +5,19 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
+import toast from "react-hot-toast";
+import TaskCard from "../../components/cards/TaskCard";
+
 
 const ManageTasks = () => {
 
-   const [allTasks, setAllTasks] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const [allTasks, setAllTasks] = useState([]);
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
 
-  const [allTasks, setAllTasks] = useState([]);
-
-  const [tasks, setTasks] = useState([]);
-  const [filterStatus,setFilterStatus] = useState("All");
-
   const navigate = useNavigate();
 
-  const getAllTasks = async () => {
+  const getAllTasks = async (filterStatus) => {
     try{
       const response = await axiosInstance.get(
         API_PATHS.TASKS.GET_ALL_TASKS,
@@ -51,12 +48,28 @@ const ManageTasks = () => {
 };
 
   const handleClick = (taskData) => {
-    Navigate(`/admin/create-task`, {state: { taskId: taskData._id}});
+    navigate(`/admin/create-task`, {state: { taskId: taskData._id}});
   }
 
   //Download task report
  const handleDownloadReport = async () => {
+  try{
+    const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_TASKS, {
+      responseType:"blob"
+    });
 
+    //Create a URL for the blob
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "task_details.xlsx");
+    link.click();
+    link.parentNode.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch(error) {
+    console.error("Error downloading expence details:", error);
+    toast.error("Failed to download expense details. Please try again.");
+  }
  };
 
  useEffect(() => {
@@ -65,7 +78,7 @@ const ManageTasks = () => {
  }, [filterStatus]);
 
 
-  return 
+  return (
 
   <DashboardLayout activeMenu="Manage Tasks">
     <div className="my-5">
@@ -98,7 +111,7 @@ const ManageTasks = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        {allTasks?.map((item, index) => (
+        {allTasks?.map((item) => (
           <TaskCard 
             key={item._id}
             title={item.title}
@@ -107,7 +120,7 @@ const ManageTasks = () => {
             status={item.progress}
             progress={item.createdAt}
             dueDate={item.dueDate}
-            assignTo={item.assignTo?.map((item) => item.profileImageurl)}
+            assignTo={item.assignTo?.map((item) => item.profileImageUrl)}
             attachmentCount={item.attachments?.length || 0}
             completedTodoCount={item.completedTodoCount || 0}
             todoChecklist={item.todoChecklist || []}
@@ -121,6 +134,7 @@ const ManageTasks = () => {
     </div>
 
   </DashboardLayout>
+  );
 };
 
 export default ManageTasks;
