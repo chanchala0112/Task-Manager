@@ -11,12 +11,13 @@ const TaskCard = ({
             priority,
             status,
             progress,
+            createdAt,
             dueDate,
-            assignTo,
+            assignedTo,
             attachmentCount,
             completedTodoCount,
             todoChecklist,
-            onclick
+            onClick
 }) => {
 
 
@@ -55,12 +56,12 @@ const TaskCard = ({
                     </div>
                     <div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}
                     >
-                        {prority} Priority
+                        {priority} Priority
                     </div>
             </div>
 
-            <div className={`px- border-l-[3px] ${
-                status === "In progress"
+            <div className={`px-4 border-l-[3px] ${
+                status === "In Progress"
                 ? "border-cyan-500"
                 : status === "Completed"
                 ? "border-indigo-500"
@@ -87,18 +88,18 @@ const TaskCard = ({
             </div>
 
             <div className="px-4">
-                <div className="flex-items-center justify-between mt-1">
+                <div className="flex items-center justify-between mt-1">
                     <div >
                         <label className="text-xs text-gray-500"> Start Date</label> 
                         <p className="text-[13px] font-medium text-gray-900">
-                            {moment{createdAt}.format{"Do MM YYYY"}}
+                            {moment(createdAt).format("Do MM YYYY")}
                         </p>
                     </div>
 
                     <div>
                         <label className="text-xs text-gray-500">Due Date</label>
                         <p className="text-[13px] font-medium text-gray-900">
-                            {moment(dueDate).format{"Do MM YYYY"}}
+                            {moment(dueDate).format("Do MM YYYY")}
                         </p>
                     </div>
                 </div>

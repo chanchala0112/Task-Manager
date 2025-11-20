@@ -2,7 +2,9 @@ import React, { useEffect, useState} from 'react'
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { LuUsers } from 'react-icons/lu';
-import AvatarGroup from "../../layout/AvatarGroup";
+// ...existing code...
+import AvatarGroup from "../AvatarGroup";
+// ...existing code...
 import Modal from "../Modal";
 
 
@@ -54,13 +56,13 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
    
   return (
     <div className="space-y-4 mt-1">
-    {setSelectedUserAvatars.lenght === 0 && (
+    {setSelectedUserAvatars.length === 0 && (
         <button className="card-btn" onClick={() => setIsModalOpen(true)}> 
             <LuUsers className="text-sm" /> Add Members
         </button>
     )}
 
-    {setSelectedUserAvatars.lenght > 0 && (
+    {setSelectedUserAvatars.length > 0 && (
         <div className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
             <AvatarGroup avatars={setSelectedUserAvatars} maxVisible={3}/>
         </div>

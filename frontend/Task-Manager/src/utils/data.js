@@ -70,8 +70,10 @@ export const STATUS_DATA = [
     { label: "Pending", value: "pending" },
     { label: "In Progress", value: "In progress" },
     { label: "Completed", value: "Completed" },
-]
+];
 
-export const STATUS_DATA = [
-    
-]
+
+export const NEW_STATUS_DATA = [
+    // some other values
+];
+

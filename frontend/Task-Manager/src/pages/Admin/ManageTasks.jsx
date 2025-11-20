@@ -28,7 +28,7 @@ const ManageTasks = () => {
         }
       );
 
-      setAllTasks(response.data?.tasks.length > 0 ? response.data.tasks : [] );
+      setAllTasks(response.data?.tasks.length > 0 ? response.data.tasks : []);
 
       //Map statusSummery data with fixed labels and order
       const statusSummary = response.data?.statusSummary || {};
