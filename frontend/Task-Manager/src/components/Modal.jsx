@@ -30,11 +30,11 @@ const Modal = ({children, isOpen, onClose, title}) => {
         >
 
         <path 
-          strocke="currentColoe"
-          strockeLinecap="round"
-          strockeLinejoin="round"
-          strockeWidth="2"
-          d="ml 1 6 6m0 0 6 6M7 716-6M7 7l-6 6"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M1 1 L13 13 M13 1 L1 13"
         />
 
         </svg>

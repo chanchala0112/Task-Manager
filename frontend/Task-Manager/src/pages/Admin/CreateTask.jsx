@@ -11,6 +11,8 @@ import TodoListInput from '../../components/Inputs/TodoListInput';
 import moment from "moment";
 import { LuTrash2 } from "react-icons/lu";
 import AddAttachmentsInput from '../../components/Inputs/AddAttachmentsInput';
+import Modal from "../../components/Modal";
+import DeleteAlert from "../../components/DeleteAlert";
 
 
 const CreateTask = () => {
@@ -22,7 +24,7 @@ const CreateTask = () => {
     title:"",
     description:"",
     priority:"",
-    dueDate:null,
+    dueDate:"",
     assignedTo: [],
     todoChecklist: [],
     attachments: [],
@@ -57,7 +59,7 @@ const CreateTask = () => {
     setLoading(true);
 
     try{
-      const todolist = taskData.todoChecklist?.map((item) => ({
+      const todoList = taskData.todoChecklist?.map((item) => ({
         text: item,
         completed: false,
       }));
@@ -65,7 +67,7 @@ const CreateTask = () => {
       await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
         ...taskData,
         dueDate: new Date(taskData.dueDate).toISOString(),
-        todoChecklist: todolist,
+        todoChecklist: todoList,
       });
 
       toast.success("Task created successfully");
@@ -164,6 +166,7 @@ const CreateTask = () => {
         setTaskData({
           title: taskInfo.title,
           description: taskInfo.description,
+          dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format("YYYY-MM-DD") : "", // <-- empty string
           priority: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
             : null,
@@ -236,7 +239,7 @@ const CreateTask = () => {
               Description
             </label>
 
-            <textArea
+            <textarea
               placeholder="Describe task"
               className="form-input"
               rows={4}
@@ -296,7 +299,7 @@ const CreateTask = () => {
             </label>
 
             <TodoListInput
-              todolist={taskData?.todoChecklist}
+              todoList={taskData?.todoChecklist}
               setTodoList={(value) => 
                 handleValueChange("todoChecklist", value)
               }
@@ -348,3 +351,4 @@ const CreateTask = () => {
 };
 
 export default CreateTask;
+

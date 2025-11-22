@@ -2,9 +2,9 @@ import React, { useEffect, useState} from 'react'
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { LuUsers } from 'react-icons/lu';
-// ...existing code...
+
 import AvatarGroup from "../AvatarGroup";
-// ...existing code...
+
 import Modal from "../Modal";
 
 
@@ -80,7 +80,7 @@ const SelectUsers = ({selectedUsers, setSelectedUsers}) => {
             key={user._id}
             className="flex items-center gap-4 border-b border-gray-200">
                 <img 
-                src={user.profileImageUrl} 
+                src={user.profileImageUrl || "/defaultavatar.png"} 
                 alt={user.name}
                 className="w-10 h-10 rounded-full"
                 />

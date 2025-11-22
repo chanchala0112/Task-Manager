@@ -72,7 +72,8 @@ const Login = () => {
             <form onSubmit={handleLogin}>
                 <Input
                     value={email}
-                    onChange = {({ target }) => setEmail(target.value)}
+                    //onChange = {({ target }) => setEmail(target.value)}
+                    onChange={setEmail} 
                     label = "Email Address"
                     placeholder = "anju@example.com"
                     type="text"
@@ -80,7 +81,8 @@ const Login = () => {
 
                 <Input
                     value={password}
-                    onChange = {({ target }) => setPassword(target.value)}
+                    //onChange = {({ target }) => setPassword(target.value)}
+                    onChange={setPassword}
                     label = "Password"
                     placeholder = "Min 8 Characters"
                     type="password"
