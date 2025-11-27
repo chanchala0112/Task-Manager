@@ -50,28 +50,6 @@ const MyTasks = () => {
     navigate(`/user/task-details/${taskID}`);
   }
 
-  //Download task report
- const handleDownloadReport = async () => {
-  try{
-    const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_TASKS, {
-      responseType:"blob"
-    });
-
-    //Create a URL for the blob
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "task_details.xlsx");
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch(error) {
-    console.error("Error downloading expence details:", error);
-    toast.error("Failed to download expense details. Please try again.");
-  }
- };
-
  useEffect(() => {
   getAllTasks(filterStatus);
   return () => {};
@@ -80,19 +58,11 @@ const MyTasks = () => {
 
   return (
 
-  <DashboardLayout activeMenu="Manage Tasks">
+  <DashboardLayout activeMenu="My Tasks">
     <div className="my-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between">
-        <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl md:text-xl font-medium">My Tasks</h2>
-          <button 
-          className="flex lg:hidden download-btn"
-          onClick={handleDownloadReport}
-          >
-            <LuFileSpreadsheet className="text-lg" />
-            Download Report
-          </button>
-        </div>
+          
 
         {tabs?.[0]?.count > 0 && (
           <div className="flex items-center gap-3">
@@ -101,17 +71,12 @@ const MyTasks = () => {
               activeTab={filterStatus}
               setActiveTab={setFilterStatus}
             />
-
-            <button className="hidden lg:flex download-btn" onClick={handleDownloadReport}>
-              <LuFileSpreadsheet className="text-lg" />
-              Download Report
-            </button>
           </div>
         )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-        {allTasks?.map((item, index) => (
+        {allTasks?.map((item) => (
           <TaskCard 
             key={item._id}
             title={item.title}
