@@ -3,7 +3,7 @@ import { BASE_URL } from "./apiPaths";
 
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
-    timeOut: 10000,
+    timeout: 10000,
     headers: {
         "Content-type": "application/json",
         Accept: "application/json",
@@ -32,16 +32,23 @@ axiosInstance.interceptors.response.use(
     (error) => {
         //Handle comon errors globally
         if (error.response) {
-            if (error.response.status === 401) {
+            (error) => {
+                console.error("Full error:", error); // Add this
+            if (error.response?.status === 401) {
                 // Redirect to login page
-                window.location.href = "login";
-            } else if (error.response.status === 500) {
+                window.location.href = "/login";
+            } else if (error.response?.status === 500) {
                 console.error("Server error. Please try again later.");
             }
             else if(error.code === "ECONNABORTED") {
                 console.error("Request timeout. Please try again.");
             }
             return Promise.reject(error);
-        }
+        }}
     });
 export default axiosInstance;
+
+/* I added in this part 
+(error) => {
+        console.error("Full error:", error); // Add this}
+*/

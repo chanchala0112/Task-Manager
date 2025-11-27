@@ -127,7 +127,6 @@ const createTask = async (req, res) => {
             createdBy: req.user._id,
             attachments,
             todoChecklist,
-
         });
         res.status(201).json({message: "Task created successfully", task});
 

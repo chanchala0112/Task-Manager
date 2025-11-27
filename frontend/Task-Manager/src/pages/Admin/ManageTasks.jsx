@@ -63,6 +63,7 @@ const ManageTasks = () => {
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", "task_details.xlsx");
+    document.body.appendChild(link);
     link.click();
     link.parentNode.removeChild(link);
     window.URL.revokeObjectURL(url);
@@ -84,7 +85,7 @@ const ManageTasks = () => {
     <div className="my-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl md:text-xl font-medium">My TAsks</h2>
+          <h2 className="text-xl md:text-xl font-medium">My Tasks</h2>
           <button 
           className="flex lg:hidden download-btn"
           onClick={handleDownloadReport}
@@ -117,10 +118,11 @@ const ManageTasks = () => {
             title={item.title}
             description={item.description}
             priority={item.priority}
-            status={item.progress}
-            progress={item.createdAt}
+            status={item.status}
+            progress={item.progress}
+            createdAt={item.createdAt}
             dueDate={item.dueDate}
-            assignTo={item.assignTo?.map((item) => item.profileImageUrl)}
+            assignedTo={item.assignedTo?.map((item) => item.profileImageUrl)}
             attachmentCount={item.attachments?.length || 0}
             completedTodoCount={item.completedTodoCount || 0}
             todoChecklist={item.todoChecklist || []}

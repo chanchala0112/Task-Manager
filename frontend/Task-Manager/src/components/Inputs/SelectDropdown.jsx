@@ -13,10 +13,10 @@ const SelectDropdown = ({options,value,onChange,placeholder}) => {
     {/* Dropdown Button */}
     <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full text-sm text-block outlint-none bg-white border border-slate-100 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
+        className="w-full text-sm text-black outline-none bg-white border border-slate-100 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
         >
-            {value ? options.find((opt) => opt.value === value)?.lable : placeholder}
-            <span className="mt-2">{isOpen ? <LuChevronDown className="rotate-180me" /> : <LuChevronDown />} </span>
+            {value ? options.find((opt) => opt.value === value)?.label : placeholder}
+            <span className="mt-2">{isOpen ? <LuChevronDown className="rotate-180" /> : <LuChevronDown />} </span>
         </button>
 
         {/* Dropdown Menu */}
@@ -26,8 +26,8 @@ const SelectDropdown = ({options,value,onChange,placeholder}) => {
               <div
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
-                className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
-                  {option.lable}
+                className="px-3 py-2 text-black cursor-pointer hover:bg-gray-100">
+                  {option.label}
 
               </div>
             ))}

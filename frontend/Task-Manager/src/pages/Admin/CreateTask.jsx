@@ -53,7 +53,6 @@ const CreateTask = () => {
     });
   };
 
-
   //Create Task
   const createTask = async () => {
     setLoading(true);
@@ -122,7 +121,7 @@ const CreateTask = () => {
       return;
     }
 
-    if (!taskData.title.trim()) {
+    if (!taskData.description.trim()) {
       setError("Description is required.");
       return;
     }
@@ -166,10 +165,10 @@ const CreateTask = () => {
         setTaskData({
           title: taskInfo.title,
           description: taskInfo.description,
-          dueDate: taskInfo.dueDate ? moment(taskInfo.dueDate).format("YYYY-MM-DD") : "", // <-- empty string
-          priority: taskInfo.dueDate
+          dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
-            : null,
+            : "",
+          priority: taskInfo.priority || "",   
           assignedTo: taskInfo?.assignedTo?.map((item) => item?.text) || [],
           attachments: taskInfo?.attachments || [],
           todoChecklist: taskInfo?.todoChecklist?.map((t) => t.text) || [],
@@ -320,7 +319,7 @@ const CreateTask = () => {
             </div>
 
             {error && (
-              <p className="text-xs font-medium text-red-500 mt-5">(error)</p>
+              <p className="text-xs font-medium text-red-500 mt-5">{error}</p>
             )}
 
             <div className="text justify-end mt-7">
