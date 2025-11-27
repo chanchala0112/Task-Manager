@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../hooks/useUserAuth";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout"; 
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -65,6 +65,7 @@ const UserDashboard = () => {
     }
   };
 
+  
   const onSeeMore= () => {
     navigate('/admin/tasks')
   }

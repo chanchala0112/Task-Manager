@@ -18,7 +18,7 @@ import MyTasks from "./pages/User/MyTasks";
 import ViewTaskDetails from "./pages/User/ViewTaskDetails";
 
 import PrivateRoute from "./routes/PrivateRoute"; // ✅ make sure this exists
-import UserProvider, { UserContext } from './context/userContext';
+import UserProvider, { UserContext } from './context/UserContext';
 import { Toaster } from "react-hot-toast";
 
 

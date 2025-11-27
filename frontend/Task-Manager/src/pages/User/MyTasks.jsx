@@ -5,8 +5,8 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
-import toast from "react-hot-toast";
 import TaskCard from "../../components/cards/TaskCard";
+
 
 const MyTasks = () => {
 
@@ -46,8 +46,8 @@ const MyTasks = () => {
     }
 };
 
-  const handleClick = (taskID) => {
-    navigate(`/user/task-details/${taskID}`);
+  const handleClick = (taskId) => {
+    navigate(`/user/task-details/${taskId}`);
   }
 
  useEffect(() => {

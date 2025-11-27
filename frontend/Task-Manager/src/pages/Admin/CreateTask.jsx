@@ -50,6 +50,7 @@ const CreateTask = () => {
       dueDate:"",
       assignedTo: [],
       todoChecklist: [],
+      attachments: [],
     });
   };
 
