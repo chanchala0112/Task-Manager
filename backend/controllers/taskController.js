@@ -225,7 +225,7 @@ const updateTaskChecklist = async (req, res) => {
 
         if(!task) return res.status(404).json({ message: "Task not found"});
 
-        if (!task.assignedTo.includes(req.user._id) && req.user.role !== "admin"){
+        if (!task.assignedTo.some(id => id.toString() === req.user._id.toString()) && req.user.role !== "admin"){
             return res.status(403)
                 .json({ message: "Not authorized to update checklist"});
         }

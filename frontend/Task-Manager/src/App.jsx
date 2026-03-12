@@ -31,7 +31,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
 
           {/* Admin Routes */}
           <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
@@ -42,7 +42,7 @@ const App = () => {
           </Route>
 
           {/* User Routes */}
-          <Route element={<PrivateRoute allowedRoles={["user"]} />}>
+          <Route element={<PrivateRoute allowedRoles={["member"]} />}>
             <Route path="/user/dashboard" element={<UserDashboard />} />
             <Route path="/user/tasks" element={<MyTasks />} />
             <Route path="/user/task-details/:id" element={<ViewTaskDetails />} />
@@ -63,15 +63,6 @@ const App = () => {
         },
       }}
     />
-
-    <Toaster
-        toastOptions={{
-          className: "",
-          style: {
-            fontSize: "13px",
-          },
-        }}
-      />
     </UserProvider>
   );
 };

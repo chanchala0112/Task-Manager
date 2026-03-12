@@ -30,21 +30,20 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-        //Handle comon errors globally
+        //Handle common errors globally
         if (error.response) {
-            (error) => {
-                console.error("Full error:", error); // Add this
-            if (error.response?.status === 401) {
+            console.error("Full error:", error);
+            if (error.response.status === 401) {
                 // Redirect to login page
+                localStorage.removeItem("token");
                 window.location.href = "/login";
-            } else if (error.response?.status === 500) {
+            } else if (error.response.status === 500) {
                 console.error("Server error. Please try again later.");
             }
-            else if(error.code === "ECONNABORTED") {
-                console.error("Request timeout. Please try again.");
-            }
-            return Promise.reject(error);
-        }}
+        } else if (error.code === "ECONNABORTED") {
+            console.error("Request timeout. Please try again.");
+        }
+        return Promise.reject(error);
     });
 export default axiosInstance;
 

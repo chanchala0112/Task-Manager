@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
         return res.status(400).json({ message: "User already exists" });
     }
     //Determine user role: Admin if correct token is provided, othermember
-    let role = "memeber";
+    let role = "member";
     if(
         adminInviteToken && adminInviteToken === process.env.ADMIN_INVITE_TOKEN
     ){
@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
         //Compare password
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch){
-            return res,statue(401).json({ message: "Invalide email or password"});
+            return res.status(401).json({ message: "Invalid email or password"});
         }
         //Return user data with JWT
         res.json({
@@ -83,7 +83,7 @@ const loginUser = async (req, res) => {
         });
 
     }catch(error){
-        res.status(500),json({message: "Server error", error:error.message});
+        res.status(500).json({message: "Server error", error:error.message});
     }
 
 
@@ -101,7 +101,7 @@ const getUserProfile = async (req, res) => {
             res.json(user);
 
     }catch(error){
-        res.status(500),json({message: "Server error", error:error.message});
+        res.status(500).json({message: "Server error", error:error.message});
     }
 };
 
@@ -117,7 +117,7 @@ const updateUserProfile = async (req, res) => {
         }
 
         user.name = req.body.name || user.name;
-        user.email = req.body.email || user,email;
+        user.email = req.body.email || user.email;
 
         if(req.body.password){
             const salt = await bcrypt.genSalt(10);
@@ -133,7 +133,7 @@ const updateUserProfile = async (req, res) => {
             token: generateToken(updateUser._id),
         });
     }catch(error){
-        res.status(500),json({message: "Server error", error:error.message});
+        res.status(500).json({message: "Server error", error:error.message});
     }
 };
 

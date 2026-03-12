@@ -71,13 +71,4 @@ const SideMenu = ({ activeMenu }) => {
     );
 };
 
-export default SideMenu;
-
-/* <img
-                        src={user?.profileImageUrl || null}
-                        alt="Profile"
-                        className="w-20 h-20 bg-slate-400 rounded-full"
-                    /> 
-
-                    meke || null kiyana kalla mn dmme
-    */
+export default SideMenu;
