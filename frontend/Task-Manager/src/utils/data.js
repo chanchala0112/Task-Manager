@@ -3,7 +3,8 @@ import {
     LuUsers,
     LuClipboardList,
     LuSquarePlus,
-    LuLogOut
+    LuLogOut,
+    LuUser
 } from "react-icons/lu";
 
 export const SIDE_MENU_DATA = [
@@ -11,7 +12,7 @@ export const SIDE_MENU_DATA = [
         id: "01",
         label: "Dashboard",
         icon: LuLayoutDashboard,
-        link: "/admin/dashboard",
+        path: "/admin/dashboard",
     },
     {
         id: "02",
@@ -29,10 +30,16 @@ export const SIDE_MENU_DATA = [
         id: "04",
         label: "Team Members",
         icon: LuUsers,
-        path: "/admin/team-members",
+        path: "/admin/users",
     },
     {
         id: "05",
+        label: "Profile",
+        icon: LuUser,
+        path: "/admin/profile",
+    },
+    {
+        id: "06",
         label: "Logout",
         icon: LuLogOut,
         path: "logout",
@@ -44,13 +51,19 @@ export const SIDE_MENU_USER_DATA = [
         id: "01",
         label: "Dashboard",
         icon: LuLayoutDashboard,
-        link: "/user/dashboard",
+        path: "/user/dashboard",
     },
     {
         id: "02",
         label: "My Tasks",
         icon: LuClipboardList,
-        link: "/user/tasks",
+        path: "/user/tasks",
+    },
+    {
+        id: "03",
+        label: "Profile",
+        icon: LuUser,
+        path: "/user/profile",
     },
     {
         id: "05",
@@ -61,14 +74,14 @@ export const SIDE_MENU_USER_DATA = [
 ];
 
 export const PRIORITY_DATA = [
-    { label: "Low", value: "low" },
-    { label: "Medium", value: "medium" },
-    { label: "High", value: "high" },
+    { label: "Low", value: "Low" },
+    { label: "Medium", value: "Medium" },
+    { label: "High", value: "High" },
 ]
 
 export const STATUS_DATA = [
-    { label: "Pending", value: "pending" },
-    { label: "In Progress", value: "In progress" },
+    { label: "Pending", value: "Pending" },
+    { label: "In Progress", value: "In Progress" },
     { label: "Completed", value: "Completed" },
 ];
 

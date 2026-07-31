@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
     //Return user data with JWT
     res.status(201).json({
         _id: user._id,
-        username: user.name,  
+        name: user.name,  
         email: user.email,
         profileImageUrl: user.profileImageUrl,
         role: user.role,
@@ -118,6 +118,7 @@ const updateUserProfile = async (req, res) => {
 
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
+        user.profileImageUrl = req.body.profileImageUrl || user.profileImageUrl;
 
         if(req.body.password){
             const salt = await bcrypt.genSalt(10);
@@ -129,6 +130,7 @@ const updateUserProfile = async (req, res) => {
             _id: updateUser._id,
             name: updateUser.name,  
             email: updateUser.email,
+            profileImageUrl: updateUser.profileImageUrl,
             role: updateUser.role,
             token: generateToken(updateUser._id),
         });

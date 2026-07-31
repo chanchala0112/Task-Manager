@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -45,6 +46,8 @@ const Login = () => {
             if (token) {
                 localStorage.setItem("token", token);
                 updateUser(response.data);  // Update user context
+
+                toast.success("Login successful!");
 
                 // Redirect based on role
                 if (role === "admin") {

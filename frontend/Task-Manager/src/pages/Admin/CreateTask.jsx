@@ -4,7 +4,7 @@ import { PRIORITY_DATA } from '../../utils/data';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import toast from 'react-hot-toast';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SelectDropdown from '../../components/Inputs/SelectDropdown';
 import SelectUsers from '../../components/layouts/SelectUsers';
 import TodoListInput from '../../components/Inputs/TodoListInput';
@@ -18,17 +18,18 @@ import DeleteAlert from "../../components/DeleteAlert";
 const CreateTask = () => {
 
   const location = useLocation();
+  const navigate = useNavigate();
   const { taskId } = location.state || {};
 
   const [taskData, setTaskData] = useState({
-    title:"",
-    description:"",
-    priority:"",
-    dueDate:"",
+    title: "",
+    description: "",
+    priority: "",
+    dueDate: "",
     assignedTo: [],
     todoChecklist: [],
     attachments: [],
-});
+  });
 
   const [currentTask, setCurrentTask] = useState(null);
 
@@ -37,17 +38,17 @@ const CreateTask = () => {
 
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
-  const handleValueChange = (key,value) => {
-    setTaskData((prevData) => ({ ...prevData, [key]: value}));
+  const handleValueChange = (key, value) => {
+    setTaskData((prevData) => ({ ...prevData, [key]: value }));
   };
 
   const clearData = () => {
     //rest form
     setTaskData({
-      title:"",
-      description:"",
-      priority:"",
-      dueDate:"",
+      title: "",
+      description: "",
+      priority: "",
+      dueDate: "",
       assignedTo: [],
       todoChecklist: [],
       attachments: [],
@@ -58,9 +59,10 @@ const CreateTask = () => {
   const createTask = async () => {
     setLoading(true);
 
-    try{
+    try {
       const todoList = taskData.todoChecklist?.map((item) => ({
-        text: item,
+        text: item.text,
+        description: item.description || "",
         completed: false,
       }));
 
@@ -72,10 +74,11 @@ const CreateTask = () => {
 
       toast.success("Task created successfully");
       clearData();
+      navigate("/admin/tasks");
     } catch (error) {
       console.error("Error creating task:", error);
       setLoading(false);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -84,13 +87,14 @@ const CreateTask = () => {
   const updateTask = async () => {
     setLoading(true);
 
-    try{
+    try {
       const todolist = taskData.todoChecklist?.map((item) => {
         const prevTodoChecklist = currentTask?.todoChecklist || [];
-        const matchedTask = prevTodoChecklist.find((task) => task.text == item);
+        const matchedTask = prevTodoChecklist.find((task) => task.text == item.text);
 
         return {
-          text: item,
+          text: item.text,
+          description: item.description || "",
           completed: matchedTask ? matchedTask.completed : false,
         };
       });
@@ -105,8 +109,9 @@ const CreateTask = () => {
       );
 
       toast.success("Task Updated Successfully");
-    }catch (error) {
-      console.error("Error catching task:", error);
+      navigate("/admin/tasks");
+    } catch (error) {
+      console.error("Error updating task:", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -133,7 +138,7 @@ const CreateTask = () => {
     }
 
     if (taskData.assignedTo?.length === 0) {
-      setError("Task not assigned to any number");
+      setError("Task not assigned to any member");
       return;
     }
 
@@ -142,7 +147,7 @@ const CreateTask = () => {
       return;
     }
 
-    if(taskId) {
+    if (taskId) {
       updateTask();
       return;
     }
@@ -154,13 +159,13 @@ const CreateTask = () => {
   const getTaskDetailsByID = React.useCallback(async () => {
     if (!taskId) return;
 
-    try{
+    try {
       const response = await axiosInstance.get(
         API_PATHS.TASKS.GET_TASK_BY_ID(taskId)
       );
 
-      if (response.data) {
-        const taskInfo = response.data;
+      if (response.data?.task) {
+        const taskInfo = response.data.task;
         setCurrentTask(taskInfo);
 
         setTaskData({
@@ -169,27 +174,28 @@ const CreateTask = () => {
           dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
             : "",
-          priority: taskInfo.priority || "",   
-          assignedTo: taskInfo?.assignedTo?.map((item) => item?.text) || [],
+          priority: taskInfo.priority || "",
+          assignedTo: taskInfo?.assignedTo?.map((item) => item?._id) || [],
           attachments: taskInfo?.attachments || [],
-          todoChecklist: taskInfo?.todoChecklist?.map((t) => t.text) || [],
+          todoChecklist: taskInfo?.todoChecklist || [],
         });
 
       }
-    } catch(error) {
-      console.error("Error fetching users:", error);
+    } catch (error) {
+      console.error("Error fetching task details:", error);
     }
   }, [taskId]);
 
   const deleteTask = async () => {
-    try{
+    try {
       await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
 
       setOpenDeleteAlert(false);
-      toast.success("Expense details deleted successfully");
-    }catch (error){
+      toast.success("Task deleted successfully");
+      navigate("/admin/tasks");
+    } catch (error) {
       console.error(
-        "Error deleting expense:", 
+        "Error deleting task:",
         error.response?.data?.message || error.message
       );
     }
@@ -197,11 +203,11 @@ const CreateTask = () => {
 
   useEffect(() => {
     getTaskDetailsByID();
-    return () => {};
-  },[getTaskDetailsByID]
-);
+    return () => { };
+  }, [getTaskDetailsByID]
+  );
 
-  return ( <DashboardLayout activeMenu="Create Task">
+  return (<DashboardLayout activeMenu="Create Task">
     <div className="mt-5">
       <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
         <div className="form-card col-span-3">
@@ -211,9 +217,9 @@ const CreateTask = () => {
             </h2>
 
             {taskId && (
-              <button 
-              className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
-              onClick={() => setOpenDeleteAlert(true)}>
+              <button
+                className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
+                onClick={() => setOpenDeleteAlert(true)}>
                 <LuTrash2 className="text-base" /> Delete
               </button>
             )}
@@ -225,11 +231,11 @@ const CreateTask = () => {
             </label>
 
             <input
-            placeholder="Create App UI"
-            className="form-input"
-            value={taskData.title} 
-            onChange={({ target })=>
-              handleValueChange("title", target.value)
+              placeholder="Create App UI"
+              className="form-input"
+              value={taskData.title}
+              onChange={({ target }) =>
+                handleValueChange("title", target.value)
               }
             />
           </div>
@@ -246,7 +252,7 @@ const CreateTask = () => {
               value={taskData.description}
               onChange={({ target }) =>
                 handleValueChange("description", target.value)
-                }
+              }
             />
           </div>
 
@@ -261,22 +267,22 @@ const CreateTask = () => {
                 value={taskData.priority}
                 onChange={(value) => handleValueChange("priority", value)}
                 placeholder="Select Priority"
-                />
+              />
             </div>
 
             <div className="col-span-6 md:col-span-4">
               <label className="text-xs font-medium text-slate-600">
                 Due Date
               </label>
-              <input 
-                  placeholder="Create App UI"
-                  className="form-input"
-                  value={taskData.dueDate}
-                  onChange={({ target }) =>
+              <input
+                placeholder="Create App UI"
+                className="form-input"
+                value={taskData.dueDate}
+                onChange={({ target }) =>
                   handleValueChange("dueDate", target.value)
                 }
                 type="date"
-                />
+              />
             </div>
 
             <div className="col-span-12 md:col-span-3">
@@ -295,43 +301,43 @@ const CreateTask = () => {
 
           <div className="mt-3">
             <label className="text-xs font-medium text-slate-600">
-              TODO Chechlist
+              TODO Checklist
             </label>
 
             <TodoListInput
               todoList={taskData?.todoChecklist}
-              setTodoList={(value) => 
+              setTodoList={(value) =>
                 handleValueChange("todoChecklist", value)
               }
             />
           </div>
 
-            <div className="mt-3">
-              <label className="text-xs font-medium text-slate-600">
-                Add Attachments
-              </label>
+          <div className="mt-3">
+            <label className="text-xs font-medium text-slate-600">
+              Add Attachments
+            </label>
 
-              <AddAttachmentsInput 
-                attachments={taskData?.attachments}
-                setAttachments={(value) =>
-                  handleValueChange("attachments", value)
-                }
-              />
-            </div>
+            <AddAttachmentsInput
+              attachments={taskData?.attachments}
+              setAttachments={(value) =>
+                handleValueChange("attachments", value)
+              }
+            />
+          </div>
 
-            {error && (
-              <p className="text-xs font-medium text-red-500 mt-5">{error}</p>
-            )}
+          {error && (
+            <p className="text-xs font-medium text-red-500 mt-5">{error}</p>
+          )}
 
-            <div className="text justify-end mt-7">
-              <button 
+          <div className="text justify-end mt-7">
+            <button
               className="add-btn"
               onClick={handleSubmit}
               disabled={loading}
-              >
-                {taskId ? "UPDATE TASK" : "CREATE TASK" }
-              </button>
-            </div>
+            >
+              {taskId ? "UPDATE TASK" : "CREATE TASK"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -345,9 +351,9 @@ const CreateTask = () => {
         onDelete={() => deleteTask()}
       />
     </Modal>
-     
-     </DashboardLayout>
-     )
+
+  </DashboardLayout>
+  )
 };
 
 export default CreateTask;

@@ -1,10 +1,10 @@
-const { text } = require("express");
 const mongoose = require("mongoose");
 
 const todoSchema = new mongoose.Schema(
     {
         text: { type: String, required: true },
         completed: { type: Boolean, default: false },
+        description: { type: String },
     }
 );
 
@@ -20,6 +20,7 @@ const taskSchema = new mongoose.Schema(
         attachments: [{ type: String }],
         todoChecklist: [todoSchema],
         progress: { type: Number, default: 0 },
+        completedDetails: { type: String },
         
     },
     {timestamps: true}

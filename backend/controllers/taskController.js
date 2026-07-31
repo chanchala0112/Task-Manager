@@ -92,7 +92,7 @@ const getTasksById =  async (req, res) => {
             "name email profileImageUrl"
         );
         if (!task) return res.status(404).json({ message: "Task not found"});
-        res.json(task);
+        res.json({ task });
     } catch (error){
         res.status(500).json({message: "Server error", error: error.message });
 
@@ -201,6 +201,7 @@ const updateTaskStatus = async (req, res) => {
         }
 
         task.status = req.body.status || task.status;
+        task.completedDetails = req.body.completedDetails || task.completedDetails;
     
         if(task.status === "Completed") {
             task.todoChecklist.forEach((item) => (item.completed = true));

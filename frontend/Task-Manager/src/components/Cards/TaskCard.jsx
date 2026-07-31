@@ -1,7 +1,7 @@
 import React from 'react'
 import Progress from '../Progress';
 import AvatarGroup from "../AvatarGroup";
-import { LuPaperclip } from "react-icons/lu";
+import { LuPaperclip, LuCircleCheck } from "react-icons/lu";
 import moment from "moment";
 
 
@@ -17,7 +17,8 @@ const TaskCard = ({
             attachmentCount,
             completedTodoCount,
             todoChecklist,
-            onClick
+            onClick,
+            onComplete
 }) => {
 
 
@@ -27,7 +28,7 @@ const TaskCard = ({
             return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
 
             case "Completed":
-            return "text-cyan-500 bg-cyan-50 border border-cyan-500/20";
+            return "text-indigo-500 bg-indigo-50 border border-indigo-500/20";
 
             default:
             return "text-violet-500 bg-violet-50 border border-violet-500/10"
@@ -40,24 +41,39 @@ const TaskCard = ({
                 return "text-emerald-500 bg-emerald-50 border border-emerald-500/10";
 
             case "Medium":
-                return "text-amber-500 bg-emerald-50 border border-emerald-500/10";
+                return "text-amber-500 bg-amber-50 border border-amber-500/10";
             
             default:
                 return "text-rose-500 bg-rose-50 border border-rose-500/10";
         }
     };
   return (
-    <div className="bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray200/50 cursor-pointer"        onClick={onClick}
+    <div className="bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer" onClick={onClick}
         >
-            <div className="flex items-end gap-3 px-4">
-                <div 
-                    className={`text-[11px] font-medium ${getStatusTagColor()} px-4 py-0.5 rounded`}>
-                        {status}
-                    </div>
-                    <div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}
+            <div className="flex items-center justify-between px-4">
+                <div className="flex items-center gap-2">
+                    <div 
+                        className={`text-[11px] font-medium ${getStatusTagColor()} px-4 py-0.5 rounded`}>
+                            {status}
+                        </div>
+                        <div className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}
+                        >
+                            {priority} Priority
+                        </div>
+                </div>
+
+                {status !== "Completed" && onComplete && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onComplete();
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-lg transition-all cursor-pointer group/btn"
+                        title="Mark as Completed"
                     >
-                        {priority} Priority
-                    </div>
+                        <LuCircleCheck size={20} className="group-hover/btn:scale-110 transition-transform" />
+                    </button>
+                )}
             </div>
 
             <div className={`px-4 border-l-[3px] ${

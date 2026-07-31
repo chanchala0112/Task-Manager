@@ -5,10 +5,12 @@ import { API_PATHS } from '../../utils/apiPaths';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import moment from 'moment';
 import AvatarGroup from '../../components/AvatarGroup';
-import { LuSquareArrowOutUpRight } from 'react-icons/lu';
+import { LuSquareArrowOutUpRight, LuChevronLeft, LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 const ViewTaskDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [task, setTask] = useState(null);
 
   const getStatusTagColor = (status) => {
@@ -20,7 +22,7 @@ const ViewTaskDetails = () => {
         return "text-lime-500 bg-cyan-50 border border-lime-500/10";
 
       default:
-        return "text-violate-500 bg-violet-50 border border-violet-500/10";
+        return "text-violet-500 bg-violet-50 border border-violet-500/10";
     }
   };
 
@@ -31,9 +33,8 @@ const ViewTaskDetails = () => {
         API_PATHS.TASKS.GET_TASK_BY_ID(id)
       );
 
-      if(response.data) {
-        const taskInfo = response.data;
-        setTask(taskInfo);
+      if(response.data?.task) {
+        setTask(response.data.task);
       }
     }catch (error) {
       console.error("Error fetching users:", error);
@@ -54,7 +55,7 @@ const ViewTaskDetails = () => {
           {todoChecklist}
         );
         if (response.status === 200) {
-          setTask(response.data || task);
+          setTask(response.data.task || response.data || task);
         } else {
           //Optionally revert the toggle if the API call fails,
           todoChecklist[index].completed = !todoChecklist[index].completed;
@@ -84,6 +85,14 @@ const ViewTaskDetails = () => {
   return(
     <DashboardLayout activeMenu="My Tasks"> 
       <div className="mt-5">
+        <button 
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-1 text-slate-500 hover:text-primary transition-colors mb-4 text-sm font-medium cursor-pointer group"
+        >
+          <LuChevronLeft className="group-hover:-translate-x-0.5 transition-transform" />
+          Back to Tasks
+        </button>
+
         {task && (
           <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
           <div className="form-card col-span-3">
@@ -127,7 +136,7 @@ const ViewTaskDetails = () => {
 
                 <AvatarGroup 
                   avatars={
-                    task?.assignedTo.map((item) => item?.profileImageUrl) || 
+                    task?.assignedTo?.map((item) => item?.profileImageUrl) || 
                   []
                 }
                 maxVisible={5}
@@ -143,7 +152,8 @@ const ViewTaskDetails = () => {
                 {task?.todoChecklist?.map((item, index) => (
                   <TodoChecklist 
                     key={`todo_${index}`}
-                    text={item.text}
+                    text={typeof item === 'string' ? item : item.text}
+                    description={typeof item === 'string' ? "" : item.description}
                     isChecked={item?.completed}
                     onChange={() => updateTodoChecklist(index)}
                   />
@@ -164,6 +174,15 @@ const ViewTaskDetails = () => {
                       onClick={() => handleLinkClick(link)}
                     />
                   ))}
+                </div>
+              )}
+
+              {task?.completedDetails && (
+                <div className="mt-6 p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
+                  <label className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest px-1">Completion Report</label>
+                  <p className="text-sm text-slate-700 mt-2 leading-relaxed italic">
+                    "{task?.completedDetails}"
+                  </p>
                 </div>
               )}
             </div>
@@ -188,17 +207,42 @@ const InfoBox = ({label, value}) => {
   );
 };
 
-const TodoChecklist = ({ text, isChecked, onChange}) => {
-  return(
-    <div className="flex items-center gap-3 p-3">
-      <input 
-        type="checkbox"
-        checked={isChecked}
-        onChange={onChange}
-        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
-      />
+const TodoChecklist = ({ text, description, isChecked, onChange }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
-      <p className="text-[13px] text-gray-800">{text}</p>
+  return (
+    <div className="mb-3 px-3">
+      <div className="flex items-center gap-3 p-3 bg-slate-50/50 rounded-xl hover:bg-white border border-transparent hover:border-slate-100 transition-all group">
+        <input 
+          type="checkbox"
+          checked={isChecked}
+          onChange={onChange}
+          className="w-4 h-4 text-primary bg-white border-slate-300 rounded focus:ring-primary/20 cursor-pointer"
+        />
+
+        <div 
+          className="flex-1 flex items-center justify-between cursor-pointer"
+          onClick={() => description && setIsExpanded(!isExpanded)}
+        >
+          <p className={`text-[13px] font-medium transition-all ${isChecked ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+            {text}
+          </p>
+          
+          {description && (
+            <div className="text-slate-400 group-hover:text-primary transition-colors">
+              {isExpanded ? <LuChevronUp size={16} /> : <LuChevronDown size={16} />}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {isExpanded && description && (
+        <div className="ml-10 mt-2 p-3 bg-white border border-slate-100 rounded-xl animate-in fade-in slide-in-from-top-1">
+          <p className="text-[12px] text-slate-500 leading-relaxed italic">
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   )
 };

@@ -68,8 +68,8 @@ const ManageTasks = () => {
     link.parentNode.removeChild(link);
     window.URL.revokeObjectURL(url);
   } catch(error) {
-    console.error("Error downloading expence details:", error);
-    toast.error("Failed to download expense details. Please try again.");
+    console.error("Error downloading task report:", error);
+    toast.error("Failed to download task report. Please try again.");
   }
  };
 
@@ -85,7 +85,7 @@ const ManageTasks = () => {
     <div className="my-5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl md:text-xl font-medium">My Tasks</h2>
+          <h2 className="text-xl md:text-xl font-medium">All Tasks</h2>
           <button 
           className="flex lg:hidden download-btn"
           onClick={handleDownloadReport}

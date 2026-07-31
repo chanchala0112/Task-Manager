@@ -6,6 +6,7 @@ import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/cards/TaskCard";
+import TaskUpdateModal from "../../components/TaskUpdateModal";
 
 
 const MyTasks = () => {
@@ -13,6 +14,8 @@ const MyTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const navigate = useNavigate();
 
@@ -48,6 +51,11 @@ const MyTasks = () => {
 
   const handleClick = (taskId) => {
     navigate(`/user/task-details/${taskId}`);
+  }
+
+  const handleComplete = (task) => {
+    setSelectedTask(task);
+    setIsUpdateModalOpen(true);
   }
 
  useEffect(() => {
@@ -93,11 +101,22 @@ const MyTasks = () => {
             onClick={() => {
               handleClick(item._id);
             }}
+            onComplete={() => handleComplete(item)}
           />
         ))}
       </div>
 
     </div>
+
+    <TaskUpdateModal
+      isOpen={isUpdateModalOpen}
+      onClose={() => {
+        setIsUpdateModalOpen(false);
+        setSelectedTask(null);
+      }}
+      task={selectedTask}
+      onTaskUpdated={() => getAllTasks(filterStatus)}
+    />
 
   </DashboardLayout>
   );

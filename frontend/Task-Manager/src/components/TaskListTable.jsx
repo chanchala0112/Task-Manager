@@ -6,7 +6,7 @@ const TaskListTable = ({tableData}) => {
         switch (status) {
             case 'Completed': return 'bg-green-100 text-green-500 border-green-200';
             case 'Pending': return 'bg-purple-100 text-purple-500 border-purple-200';
-            case 'InProgress': return 'bg-cyan-100 text-cyan-500 border-cyan-200';
+            case 'In Progress': return 'bg-cyan-100 text-cyan-500 border-cyan-200';
             default: return 'bg-gray-100 text-gray-500 border-gray-200';
         }
     };

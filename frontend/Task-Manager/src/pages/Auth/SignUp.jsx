@@ -8,6 +8,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/UserContext";
 import uploadImage from "../../utils/uploadImage";
+import { toast } from "react-hot-toast";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -59,18 +60,11 @@ const SignUp = () => {
         adminInviteToken,
       });
 
-      const { token, role } = response.data;
+      const { token } = response.data;
 
       if (token) {
-        localStorage.setItem("token", token);
-        updateUser(response.data);
-
-        // Redirect based on role
-        if (role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/user/dashboard");
-        }
+        toast.success("Registration successful! Please login.");
+        navigate("/login");
       }
     } catch (error) {
       if (error.response && error.response.data.message) {

@@ -12,6 +12,7 @@ import SignUp from "./pages/Auth/SignUp";
 import ManageTasks from "./pages/Admin/ManageTasks";
 import CreateTask from "./pages/Admin/CreateTask";
 import ManageUsers from "./pages/Admin/ManageUsers";
+import Profile from "./pages/Admin/Profile";
 
 import UserDashboard from "./pages/User/UserDashboard";
 import MyTasks from "./pages/User/MyTasks"; 
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/admin/tasks" element={<ManageTasks />} />
             <Route path="/admin/create-task" element={<CreateTask />} />
             <Route path="/admin/users" element={<ManageUsers />} />
+            <Route path="/admin/profile" element={<Profile />} />
           </Route>
 
           {/* User Routes */}
@@ -46,6 +48,7 @@ const App = () => {
             <Route path="/user/dashboard" element={<UserDashboard />} />
             <Route path="/user/tasks" element={<MyTasks />} />
             <Route path="/user/task-details/:id" element={<ViewTaskDetails />} />
+            <Route path="/user/profile" element={<Profile />} />
           </Route>
 
           {/* Default Route*/}
